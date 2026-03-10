@@ -7,11 +7,11 @@ export default async function sendMail({email, emailType, userId}: any){
         const token = await bcrypt.hash(userId.toString(), 10);
 
         if(emailType === "VERIFY"){
-            await User.findOneAndUpdate({_id: userId}, {verifyToken: token, verifyTokenExpiry: Date.now() + 360000});
+            await User.findOneAndUpdate({_id: userId}, {verifyToken: token, verifyTokenExpiry: Date.now() + 3600000});
         }
 
         if(emailType === "RESET"){
-            await User.findOneAndUpdate({_id: userId}, { forgotPasswordToken: token, forgotPasswordTokenExpiry: Date.now() + 360000});
+            await User.findOneAndUpdate({_id: userId}, { forgotPasswordToken: token, forgotPasswordTokenExpiry: Date.now() + 3600000});
         }
 
         const transporter = nodemailer.createTransport({
@@ -23,12 +23,17 @@ export default async function sendMail({email, emailType, userId}: any){
             }
         })
 
+        const domain = process.env.DOMAIN;
+        if(!domain){
+            throw new Error("Domain name is not defined!");
+        }
+
         const mailOptions = {
             from: "shubhamsingh0854@gmail.com",
             to: email,
             subject: emailType === "VERIFY"? 'Verify Your Email': "Reset Your Password",
-            html: `<p>Click <a href="${process.env.DOMAIN!}/${emailType === "VERIFY"? "verifyEmail": "resetPassword"}?token=${token}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}
-            or copy and paste the link below in your browser. <br> ${process.env.DOMAIN!}/verifyEmail?token=${token}
+            html: `<p>Click <a href="${domain}/${emailType === "VERIFY"? "verifyEmail": "resetPassword"}?token=${token}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}
+            or copy and paste the link below in your browser. <br> ${domain}/${emailType === "VERIFY"? "verifyEmail": "resetPassword"}?token=${token}
             </p>`
         }
 
