@@ -27,8 +27,8 @@ export default async function sendMail({email, emailType, userId}: any){
             from: "shubhamsingh0854@gmail.com",
             to: email,
             subject: emailType === "VERIFY"? 'Verify Your Email': "Reset Your Password",
-            html: `<p>Click <a href="${process.env.DOMAIN}/${emailType === "VERIFY"? "verifyEmail": "resetPassword"}?token=${token}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}
-            or copy and paste the link below in your browser. <br> ${process.env.DOMAIN}/verifyEmail?token=${token}
+            html: `<p>Click <a href="${process.env.DOMAIN!}/${emailType === "VERIFY"? "verifyEmail": "resetPassword"}?token=${token}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}
+            or copy and paste the link below in your browser. <br> ${process.env.DOMAIN!}/verifyEmail?token=${token}
             </p>`
         }
 
