@@ -18,8 +18,8 @@ export default async function sendMail({email, emailType, userId}: any){
             host: "sandbox.smtp.mailtrap.io",
             port: 2525,
             auth: {
-                user: "66adce4064f50f",
-                pass: "da6b5362c38d89"
+                user: process.env.MAILUSER!,
+                pass: process.env.MAILPASS!
             }
         })
 
