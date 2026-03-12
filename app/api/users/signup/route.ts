@@ -44,7 +44,8 @@ export async function POST(request:NextRequest) {
         return NextResponse.json({
             message: `User ${username} created successfully`,
             success: true,
-            savedUser
+            savedUser,
+            mailRes
         }, { status: 201})
 
 

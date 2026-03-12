@@ -16,6 +16,7 @@ const SignupPage = () => {
     })
 
   const [ buttonDisabled, setButtonDisabled ] = useState(true);
+  const [ mailMsg, setMailMsg ] = useState(null);
 
   const router = useRouter();
 
@@ -30,8 +31,8 @@ const SignupPage = () => {
       try {
         const res = await axios.post('/api/users/signup', user);
         console.log("res: ", res);
-        if(res){
-          router.push('/login');
+        if(res.data.mailRes){
+            setMailMsg(res.data.mailRes.accepted[0]);
         }
       } catch (error: any) {
         console.log("Signup failed! ", error.message)
@@ -101,14 +102,19 @@ const SignupPage = () => {
       <button
       disabled={buttonDisabled}
       onClick={onSingup}
-      className={`${buttonDisabled && "bg-red-500"} mt-1
+      className={`${buttonDisabled && "bg-gray-700" || "bg-red-500"} mt-1
       p-2 border border-gray-800
       rounded-lg mb-4 focus:outline-none
       hover:border-white
       focus:border-gray-600
       cursor-pointer
-      `}>{buttonDisabled?"no Signup": "Signup"}</button>
-      <Link href="/login">Go to Login</Link>
+      `}>{buttonDisabled?"No Signup": "Signup"}</button>
+      {
+        mailMsg && (
+          <div><p>A email verification link is sent to <span className="text-[16px] text-blue-300">{mailMsg}</span></p></div>
+        )
+      }
+      <Link href="/login" className="text-blue-500">Go to Login</Link>
     </div>
   )
 }
